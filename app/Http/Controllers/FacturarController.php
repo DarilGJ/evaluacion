@@ -40,6 +40,10 @@ class FacturarController extends Controller
                 ],
             'fecha' => 'required',
             'comentario' => 'sometimes',
+            'productos' => 'required|array',
+            'productos.*.producto_id' => 'required|exists:productos,id',
+            'productos.*.cantidad' => 'required|integer|min:1',
+            'productos.*.descuento' => 'required|numeric|min:0|max:100',
         ]);
 
         $factura = Factura::create([
