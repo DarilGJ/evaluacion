@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use App\Models\Factura;
 use Illuminate\Http\Request;
+use App\Models\Producto;
+use App\Models\Cliente;
 
 class FacturarController extends Controller
 {
@@ -21,7 +23,9 @@ class FacturarController extends Controller
      */
     public function create()
     {
-        return view('modules.facturar.create');
+        $productos = Producto::query()->get();
+        $clientes = Cliente::query()->get();
+        return view('modules.facturar.create', ['productos' => $productos, 'clientes' => $clientes]);
     }
 
     /**
@@ -37,7 +41,8 @@ class FacturarController extends Controller
             'fecha' => 'required',
             'comentario' => 'sometimes',
         ]);
-        Factura::create([
+
+        $factura = Factura::create([
             'cliente_id' => $request->input('cliente_id'),
             'fecha' => $request->input('fecha'),
             'comentario' => $request->input('comentario'),
@@ -47,6 +52,29 @@ class FacturarController extends Controller
             'descuento' => 0,
             'cantidad_productos' => 0,
         ]);
+
+        foreach ($request->input('productos') as $producto) {
+
+            $prod = Producto::query()->findOrFail($producto['producto_id']);
+
+            $factura->detalle()->create([
+                'producto_id' => $prod->id,
+                'cantidad' => $producto['cantidad'],
+                'descuento' => $producto['descuento'],
+                'subtotal' => $subtotal = $producto['cantidad'] * $prod->costo_unitario,
+                'iva' => $iva = $subtotal * 0.12,
+                'total' => $subtotal + $iva - $subtotal * $producto['descuento'] / 100,
+            ]);
+        }
+
+        $factura->total = $factura->detalle()->sum('total');
+        $factura->subtotal = $factura->detalle()->sum('subtotal');
+        $factura->iva = $factura->detalle()->sum('iva');
+        $factura->descuento = $factura->detalle()->sum('descuento');
+        $factura->cantidad_productos = $factura->detalle()->sum('cantidad');
+        $factura->save();
+
+
         return redirect()->route('facturar.index');
     }
 
