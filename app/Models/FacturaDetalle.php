@@ -19,4 +19,8 @@ class FacturaDetalle extends Model
         'iva',
         'descuento',
     ];
+
+    public function producto(){
+        return $this->belongsTo(Producto::class);
+    }
 }
