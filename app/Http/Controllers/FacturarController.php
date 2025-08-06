@@ -112,6 +112,9 @@ class FacturarController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        $factura = Factura::query()->findOrFail($id);
+        $factura->detalle()->delete();
+        $factura->delete();
+        return redirect()->route('facturar.index');
     }
 }

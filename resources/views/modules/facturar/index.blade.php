@@ -28,7 +28,11 @@
                 <td>{{ $factura->total }}</td>
                 <td>
                     <a href="{{ route('facturar.edit', $factura) }}" type="button" class="btn btn-sm btn-primary">Editar</a>
-                    <button type="button" class="btn btn-sm btn-danger">Eliminar</button>
+                    <form action="{{ route('facturar.destroy', $factura) }}" method="post">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de querer eliminar esta factura?')">Eliminar</button>
+                    </form>
                 </td>
             </tr>
         @endforeach
