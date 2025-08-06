@@ -17,7 +17,10 @@ class ProductoFactory extends Factory
     public function definition(): array
     {
         return [
-            //
+            'descripcion' => $this->faker->word,
+            'costo_unitario' => $this->faker->randomFloat(2, 10, 1000),
+            'activo' => $this->faker->boolean,
+            'stock' => $this->faker->numberBetween(0, 100),
         ];
     }
 }

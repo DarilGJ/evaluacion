@@ -1,6 +1,6 @@
 @extends('layouts.app')
 @section('content')
-    <h1>Listar Facturas </h1><a href="{{ route('facturar.create') }}" class="btn btn-primary">Crear FActura</a>
+    <h1>Listar Facturas </h1><a href="{{ route('facturar.create') }}" class="btn btn-primary">Crear Factura</a>
     <table class="table table-striped">
         <thead>
         <tr>
@@ -28,7 +28,11 @@
                 <td>{{ $factura->total }}</td>
                 <td>
                     <a href="{{ route('facturar.edit', $factura) }}" type="button" class="btn btn-sm btn-primary">Editar</a>
-                    <button type="button" class="btn btn-sm btn-danger">Eliminar</button>
+                    <form action="{{ route('facturar.destroy', $factura) }}" method="post">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Estás seguro de querer eliminar esta factura?')">Eliminar</button>
+                    </form>
                 </td>
             </tr>
         @endforeach

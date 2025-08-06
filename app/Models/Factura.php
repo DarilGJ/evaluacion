@@ -25,4 +25,8 @@ class Factura extends Model
     public function cliente(){
         return $this->belongsTo(Cliente::class);
     }
+
+    public function detalle(){
+        return $this->hasMany(FacturaDetalle::class);
+    }
 }
