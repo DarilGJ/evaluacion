@@ -16,5 +16,6 @@ class Cliente extends Model
         'direccion',
         'nit',
         'activo',
+        'porcentaje_iva',
     ];
 }

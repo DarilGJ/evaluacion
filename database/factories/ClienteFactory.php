@@ -22,6 +22,7 @@ class ClienteFactory extends Factory
             'direccion' => $this->faker->address(),
             'nit' => $this->faker->randomNumber(9, true),
             'activo' => $this->faker->boolean(),
+            'porcentaje_iva' => $this->faker->randomFloat(2)
         ];
     }
 }
